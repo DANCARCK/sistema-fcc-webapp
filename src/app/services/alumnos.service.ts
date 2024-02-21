@@ -6,39 +6,38 @@ import { ErrorsService } from './tools/errors.service';
 @Injectable({
   providedIn: 'root'
 })
-export class MaestrosService {
+export class AlumnosService {
 
   constructor(
     private http: HttpClient,
     private validatorService: ValidatorService,
-    private errorService: ErrorsService,
+    private errorService: ErrorsService
   ) { }
 
-  public esquemaMaestro(){
-    return{
-      'rol': '',
-      'id_trabajador':'',
+  public esquemaAlumno(){
+    return {
+      'matricula': '',
       'first_name': '',
       'last_name': '',
       'email': '',
       'password': '',
       'confirmar_password': '',
       'fecha_nacimiento': '',
-      'telefono': '',
+      'curp': '',
       'rfc': '',
-      'cubiculo': '',
-      'area_investigacion': '',
-      'materias_json': []
+      'edad': '',
+      'telefono': '',
+      'ocupacion': '',
     }
   }
 
-  //Validar Formulario
-  public validarMaestro(data: any, editar: boolean){
-    console.log("Validando Maestro...", data);
+  //Validación para el formulario
+  public validarAlumno(data: any, editar: boolean){
+    console.log("Validando user... ", data);
     let error: any = [];
 
-    if(!this.validatorService.required(data["id_trabajador"])){
-      error["id_trabajador"] = this.errorService.required;
+    if(!this.validatorService.required(data["matricula"])){
+      error["matricula"] = this.errorService.required;
     }
 
     if(!this.validatorService.required(data["first_name"])){
@@ -71,6 +70,32 @@ export class MaestrosService {
       error["fecha_nacimiento"] = this.errorService.required;
     }
 
+    if(!this.validatorService.required(data["curp"])){
+      error["curp"] = this.errorService.required;
+    }else if(!this.validatorService.min(data["curp"], 17)){
+      error["curp"] = this.errorService.min(17);
+      alert("La longitud de caracteres de la CURP es menor, deben ser 18");
+    }else if(!this.validatorService.max(data["curp"], 19)){
+      error["curp"] = this.errorService.max(19);
+      alert("La longitud de caracteres de la CURP es mayor, deben ser 18");
+    }
+
+    if(!this.validatorService.required(data["rfc"])){
+      error["rfc"] = this.errorService.required;
+    }else if(!this.validatorService.min(data["rfc"], 12)){
+      error["rfc"] = this.errorService.min(12);
+      alert("La longitud de caracteres del RFC es menor, deben ser 13");
+    }else if(!this.validatorService.max(data["rfc"], 14)){
+      error["rfc"] = this.errorService.max(14);
+      alert("La longitud de caracteres del RFC es mayor, deben ser 13");
+    }
+
+    if(!this.validatorService.required(data["edad"])){
+      error["edad"] = this.errorService.required;
+    }else if(!this.validatorService.numeric(data["edad"])){
+      alert("El formato es solo números");
+    }
+
     if(!this.validatorService.required(data["telefono"])){
       error["telefono"] = this.errorService.required;
     }else if(!this.validatorService.min(data["telefono"], 9)){
@@ -81,25 +106,11 @@ export class MaestrosService {
       alert("La longitud de caracteres del telefono es mayor, deben ser 10");
     }
 
-    if(!this.validatorService.required(data["rfc"])){
-      error["rfc"] = this.errorService.required;
-    }else if(!this.validatorService.min(data["rfc"], 12)){
-      error["rfc"] = this.errorService.min(12);
-      alert("La longitud de caracteres deL RFC es menor, deben ser 13");
-    }else if(!this.validatorService.max(data["rfc"], 14)){
-      error["rfc"] = this.errorService.max(14);
-      alert("La longitud de caracteres deL RFC es mayor, deben ser 13");
+    if(!this.validatorService.required(data["ocupacion"])){
+      error["ocupacion"] = this.errorService.required;
     }
 
-    if(!this.validatorService.required(data["cubiculo"])){
-      error["cubiculo"] = this.errorService.required;
-    }
-
-    if(!this.validatorService.required(data["area_investigacion"])){
-      error["area_investigación"] = this.errorService.required;
-    }
-
-
+    //Return arreglo
     return error;
   }
 

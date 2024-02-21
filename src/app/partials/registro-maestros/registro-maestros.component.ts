@@ -1,6 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatRadioChange } from '@angular/material/radio';
 import { MaestrosService } from 'src/app/services/maestros.service';
 declare var $:any;
 
@@ -14,14 +12,14 @@ export class RegistroMaestrosComponent implements OnInit{
 
   public maestro: any = {};
   public editar: boolean = false;
-  public user: any = {};
+  public errors:any = {};
 
   public hide_1: boolean = false;
   public hide_2: boolean = false;
   public inputType_1: string = 'password';
   public inputType_2: string = 'password';
 
-  public errors:any = {};
+
 
   //array para areas - checkbox
   public areas:any[]= [
@@ -119,7 +117,7 @@ export class RegistroMaestrosComponent implements OnInit{
     console.log(event);
     console.log(event.value.toISOString());
 
-    this.user.fecha_nacimiento = event.value.toISOString().split("T")[0];
-    console.log("Fecha: ", this.user.fecha_nacimiento);
+    this.maestro.fecha_nacimiento = event.value.toISOString().split("T")[0];
+    console.log("Fecha: ", this.maestro.fecha_nacimiento);
   }
 }
