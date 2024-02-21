@@ -23,6 +23,7 @@
           <input matInput [(ngModel)]="admin.last_name" placeholder="Escribe apellidos">
       </mat-form-field>
       <div *ngIf="errors.last_name" class="invalid-feedback">{{ errors.last_name }}</div>
+
       <mat-form-field class="mat-input" appearance="outline">
         <mat-label>Correo electrónico</mat-label>
         <input matInput [(ngModel)]="admin.email" placeholder="Escribe correo electrónico" [disabled]="editar">

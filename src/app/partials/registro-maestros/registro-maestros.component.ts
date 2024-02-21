@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatRadioChange } from '@angular/material/radio';
+import { MaestrosService } from 'src/app/services/maestros.service';
+declare var $:any;
 
 @Component({
   selector: 'app-registro-maestros',
@@ -10,6 +14,23 @@ export class RegistroMaestrosComponent implements OnInit{
 
   public maestro: any = {};
   public editar: boolean = false;
+  public user: any = {};
+
+  public hide_1: boolean = false;
+  public hide_2: boolean = false;
+  public inputType_1: string = 'password';
+  public inputType_2: string = 'password';
+
+  public errors:any = {};
+
+  //array para areas - checkbox
+  public areas:any[]= [
+    {viewValue: 'Desarrollo Web'},
+    {viewValue: 'Programación'},
+    {viewValue: 'Bases de datos'},
+    {viewValue: 'Redes'},
+    {viewValue: 'Matemáticas'}
+  ]
 
   //array para materias - checkbox
   public materias:any[]= [
@@ -25,10 +46,14 @@ export class RegistroMaestrosComponent implements OnInit{
     {value: '10', nombre: 'Administración de S.O.'},
   ];
 
-  constructor(){}
+  constructor(
+    private maestrosService: MaestrosService
+  ){}
 
   ngOnInit(): void {
-
+    this.maestro = this.maestrosService.esquemaMaestro();
+    this.maestro.rol = this.rol;
+    console.log("Maestro: ", this.maestro);
   }
 
   public regresar(){
@@ -36,14 +61,19 @@ export class RegistroMaestrosComponent implements OnInit{
   }
 
   public registrar(){
+    this.errors = [];
 
+    this.errors = this.maestrosService.validarMaestro(this.maestro, this.editar)
+    if(!$.isEmptyObject(this.errors)){
+      return false;
+    }
   }
 
   public actualizar(){
 
   }
 
-  public checkboxChange(event:any){
+  public checkboxChange(event: any){
     //console.log("Evento: ", event);
     if(event.checked){
       this.maestro.materias_json.push(event.source.value)
@@ -56,5 +86,40 @@ export class RegistroMaestrosComponent implements OnInit{
       });
     }
     console.log("Array materias: ", this.maestro);
+  }
+
+  //Funciones para password
+  showPassword()
+  {
+    if(this.inputType_1 == 'password'){
+      this.inputType_1 = 'text';
+      this.hide_1 = true;
+    }
+    else{
+      this.inputType_1 = 'password';
+      this.hide_1 = false;
+    }
+  }
+
+  showPwdConfirmar()
+  {
+    if(this.inputType_2 == 'password'){
+      this.inputType_2 = 'text';
+      this.hide_2 = true;
+    }
+    else{
+      this.inputType_2 = 'password';
+      this.hide_2 = false;
+    }
+  }
+
+  //Función para detectar el cambio de fecha
+  //Para la fecha
+  public changeFecha(event :any){
+    console.log(event);
+    console.log(event.value.toISOString());
+
+    this.user.fecha_nacimiento = event.value.toISOString().split("T")[0];
+    console.log("Fecha: ", this.user.fecha_nacimiento);
   }
 }
